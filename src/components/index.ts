@@ -1,7 +1,4 @@
 
 
-export {} from './cart';
-    export {} from './cart';
-        export {} from './cart';
-
+export * from './ui/top-menu/TopMenu';
 
