@@ -9,3 +9,4 @@ export { ProductGrid } from './products/product-grid/ProductGrid';
 export { ProductGridItem } from './products/product-grid/ProductGridItem';
 
 export { SizeSelector } from './product/size-selector/SizeSelector';
+export { QuantitySelector } from './product/quantity-selector/QuantitySelector';
