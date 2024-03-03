@@ -2,7 +2,7 @@ import React from 'react';
 import { notFound } from 'next/navigation';
 import { initialData } from '@/seed/seed';
 import { titleFont } from '@/config/fonts';
-import { ProductSlideshow, QuantitySelector, SizeSelector } from '@/components';
+import { ProductMovileSlideshow, ProductSlideshow, QuantitySelector, SizeSelector } from '@/components';
 
 interface Props {
     params: {
@@ -14,8 +14,7 @@ export default function ({ params }: Props) {
 
     const { slug } = params;
     const product = initialData.products.find(product => product.slug === slug);
-    console.log(product);
-
+    
     if (!product) {
         notFound();
     }
@@ -23,13 +22,20 @@ export default function ({ params }: Props) {
     return (
         <div className='mt-5 mb-20 grid grid-cols-1 md:grid-cols-3 gap-3'>
 
-            {/* Slideshow */}
-            <div className='col-span-1 md:col-span-2 bg-red-300'>
-                <ProductSlideshow images={ product.images } title={ product.title } />
+
+            {/* Desktop */}
+            <div className='col-span-1 md:col-span-2'>
+
+                {/* Slideshow */}
+                <ProductSlideshow className='hidden md:block' images={ product.images } title={ product.title } />
+
+                {/* Movile Slideshow */}
+                <ProductMovileSlideshow className='block md:hidden' images={ product.images } title={ product.title } />
+
             </div>
 
             {/* Detalles */}
-            <div className='col-span-1 px-5 bg-blue-300'>
+            <div className='col-span-1 px-5'>
                 
                 <h1 className={`${ titleFont.className } antialiased font-bold text-xl`}>
                     { product.title }
