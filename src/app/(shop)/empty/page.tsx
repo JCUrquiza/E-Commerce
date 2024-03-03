@@ -1,9 +1,23 @@
+import Link from 'next/link';
 import React from 'react';
+import { IoCartOutline } from 'react-icons/io5';
 
 export default function () {
     return (
-        <div>
-            <h1>Empty Page</h1>
+        <div className='flex justify-center items-center h-[800px]'>
+
+            <IoCartOutline size={100} className='mx-5' />
+
+            <div className='flex flex-col items-center'>
+
+                <h1 className='text-xl font-semibold'>Tu carrito está vació</h1>
+
+                <Link href='/' className='text-blue-500 mt-2 text-4xl'>
+                    Regresar
+                </Link>
+
+            </div>
+
         </div>
     )
 }
