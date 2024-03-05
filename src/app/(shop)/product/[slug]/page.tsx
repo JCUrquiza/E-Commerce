@@ -1,8 +1,11 @@
+export const revalidate = 604800; // 7 días
+
 import React from 'react';
 import { notFound } from 'next/navigation';
-import { initialData } from '@/seed/seed';
 import { titleFont } from '@/config/fonts';
 import { ProductMovileSlideshow, ProductSlideshow, QuantitySelector, SizeSelector } from '@/components';
+import { getProductBySlug } from '@/actions';
+// import { getProductBySlug } from '@/actions/product/get-product-by-slug';
 
 interface Props {
     params: {
@@ -10,10 +13,11 @@ interface Props {
     }
 }
 
-export default function ProductsBySlugPage({ params }: Props) {
+export default async function ProductsBySlugPage({ params }: Props) {
 
     const { slug } = params;
-    const product = initialData.products.find(product => product.slug === slug);
+    // const product = initialData.products.find(product => product.slug === slug);
+    const product = await getProductBySlug(slug);
     
     if (!product) {
         notFound();
