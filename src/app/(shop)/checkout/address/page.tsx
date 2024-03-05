@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { Title } from '@/components';
 
-export default function() {
+export default function AddressPage() {
 
     return (
 

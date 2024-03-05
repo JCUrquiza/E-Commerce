@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { titleFont } from '@/config/fonts';
 
-export default function () {
+export default function NewAccountPage() {
 
   return (
 

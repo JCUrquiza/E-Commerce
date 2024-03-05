@@ -1,3 +1,5 @@
+export const revalidate = 60;   // 60 segundos
+
 import React from 'react';
 import { notFound, redirect } from 'next/navigation';
 import { Pagination, ProductGrid, Title } from '@/components';
@@ -13,7 +15,7 @@ interface Props {
     }
 }
 
-export default async function ({ params, searchParams }: Props) {
+export default async function GenderPage({ params, searchParams }: Props) {
 
     const { gender } = params;
     const page = searchParams.page ? parseInt(searchParams.page) : 1;
