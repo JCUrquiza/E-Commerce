@@ -14,3 +14,5 @@ export { QuantitySelector } from './product/quantity-selector/QuantitySelector';
 export { ProductSlideshow } from './product/slideshow/ProductSlideshow';
 export { ProductMovileSlideshow } from './product/slideshow/ProductMovileSlideshow';
 
+export { StockLabel } from './product/stock-label/StockLabel';
+
