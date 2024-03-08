@@ -1,15 +1,8 @@
 import React from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
-import { QuantitySelector, Title } from '@/components';
-import { initialData } from '@/seed/seed';
+import { Title } from '@/components';
 import { redirect } from 'next/navigation';
-
-const productsInCart = [
-    initialData.products[0],
-    initialData.products[1],
-    initialData.products[2],
-];
+import { ProductsInCart } from './ui/ProductsInCart';
 
 export default function CartPage() {
 
@@ -32,32 +25,7 @@ export default function CartPage() {
                     
 
                         {/* Items */}
-                        {
-                            productsInCart.map( product => (
-                                <div className='flex mb-5' key={ product.slug }>
-                                    <Image
-                                        src={`/products/${ product.images[0] }`}
-                                        width={100}
-                                        height={100}
-                                        style={{
-                                            width: '100px',
-                                            height: '100px'
-                                        }}
-                                        alt={product.title}
-                                        className='mr-5 rounded'
-                                    />
-                                    <div>
-                                        <p>{ product.title }</p>
-                                        <p>${ product.price }</p>
-                                        <QuantitySelector quantity={3} />
-
-                                        <button className='underline mt-3'>
-                                            Remover
-                                        </button>
-                                    </div>
-                                </div>
-                            ))
-                        }
+                        <ProductsInCart />
 
                     </div>
 
