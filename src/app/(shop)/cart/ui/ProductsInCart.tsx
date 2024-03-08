@@ -10,6 +10,7 @@ export const ProductsInCart = () => {
 
     const [loaded, setLoaded] = useState(false);
     const productsInCart = useCartStore( state => state.cart );
+    const updateProductQuantity = useCartStore( state => state.updateProductQuantity );
 
     useEffect(() => {
         setLoaded(true);
@@ -45,7 +46,7 @@ export const ProductsInCart = () => {
 
                             <QuantitySelector 
                                 quantity={ product.quantity }
-                                onQuantityChanged={ value => console.log(value) }
+                                onQuantityChanged={ quantity => updateProductQuantity(product, quantity) }
                             />
 
                             <button className='underline mt-3'>

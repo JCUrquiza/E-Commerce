@@ -8,7 +8,7 @@ interface State {
     // Methods
     getTotalItems: () => number;
     addProductToCart: (product: CartProduct) => void;
-    // updateProductQuantity
+    updateProductQuantity: (product: CartProduct, quantity: number) => void;
     // removeProduct
 }
 
@@ -28,7 +28,6 @@ export const useCartStore = create<State>()(
             addProductToCart: (product: CartProduct) => {
                 // Desestructuración
                 const { cart } = get();
-                console.log(cart);
                 
                 // 1.- Revisar si el producto existe en el carrito con la talla seleccionada. (some regresa true o false y ya no continua):
                 const productInCart = cart.some(
@@ -51,7 +50,24 @@ export const useCartStore = create<State>()(
     
                 set({ cart: updatedCartProducts });
     
+            },
+
+            updateProductQuantity: (product: CartProduct, quantity: number) => {
+
+                // Desestructuración
+                const { cart } = get();
+
+                const updatedCartProducts = cart.map( item => {
+                    if ( item.id === product.id && item.size === product.size ) {
+                        return {...item, quantity: quantity};
+                    }
+                    return item;
+                });
+    
+                set({ cart: updatedCartProducts });
+                
             }
+
         })
 
         ,{
