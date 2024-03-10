@@ -5,12 +5,16 @@ async function main() {
 
     // 1. Borrar registros previos
     await Promise.all([
+        prisma.user.deleteMany({}),
         prisma.productImage.deleteMany(),
         prisma.product.deleteMany(),
         prisma.category.deleteMany(),
     ]);
 
-    const { categories, products } = initialData;
+    const { categories, products, users } = initialData;
+
+    // Insertar usuarios en la BBDD
+    await prisma.user.createMany({ data: users });
 
     // 2. Insertar categorias
     const  categoriesData = categories.map( category => ({
