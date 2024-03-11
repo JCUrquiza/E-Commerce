@@ -2,8 +2,10 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { useFormState } from 'react-dom';
+import { useFormState, useFormStatus } from 'react-dom';
 import { authenticate } from '@/actions';
+import { IoInformationOutline } from 'react-icons/io5';
+import clsx from 'clsx';
 
 export const LoginForm = () => {
 
@@ -19,9 +21,18 @@ export const LoginForm = () => {
             <label htmlFor="email">Contraseña</label>
             <input className="px-5 py-2 border bg-gray-200 rounded mb-5" type="password" name='password' />
 
-            <button className="btn-primary" type='submit'>
-                Ingresar
-            </button>
+            <div className='flex h-8 items-end space-x-1' aria-live='polite' aria-atomic='true'>
+                {
+                    state === 'CredentialSignIn' && (
+                        <div className='flex flex-row mb-2'>
+                            <IoInformationOutline className='h-5 w-5 text-red-500' />
+                            <p className='text-sm text-red-500'>Las credenciales no son correctas</p>
+                        </div>
+                    )
+                }
+            </div>
+
+            <LoginButton />
 
             {/* divisor l ine */ }
             <div className="flex items-center my-5">
@@ -39,4 +50,22 @@ export const LoginForm = () => {
         </form>
     )
 
+}
+
+function LoginButton() {
+
+    const { pending } = useFormStatus();
+
+    return (
+        <button 
+            className={ clsx({
+                "btn-primary": !pending,
+                "btn-disabled": pending
+            })}
+            disabled={ pending }
+            type='submit'
+        >
+            Ingresar
+        </button>
+    )
 }

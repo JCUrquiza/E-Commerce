@@ -1,6 +1,7 @@
 'use server';
 
 import { signIn } from '@/auth.config';
+import { sleep } from '@/utils';
 
 export async function authenticate(
     prevState: string | undefined,
@@ -8,6 +9,8 @@ export async function authenticate(
 ) {
 
     try {
+
+        await sleep(2);
         
         console.log( Object.fromEntries(formData) );
         await signIn('credentials', Object.fromEntries(formData));
