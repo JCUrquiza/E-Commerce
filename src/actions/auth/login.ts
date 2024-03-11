@@ -11,14 +11,18 @@ export async function authenticate(
     try {
 
         // await sleep(2);
-        
-        console.log( Object.fromEntries(formData) );
-        await signIn('credentials', Object.fromEntries(formData));
+        await signIn('credentials', {
+            ...Object.fromEntries(formData),
+            redirect: false
+        });
+        return 'Success';
 
     } catch (error) {
-
-        return 'CredentialSignIn'
-        
+        // if ((error as any).type === 'CredentialSignIn') {
+        //     return 'CredentialSignIn'
+        // }
+        // return 'Error desconocido';
+        return 'CredentialSignIn';
     }
 
 }
