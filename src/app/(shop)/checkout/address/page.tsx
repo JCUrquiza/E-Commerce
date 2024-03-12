@@ -1,7 +1,10 @@
 import { Title } from '@/components';
 import { AddressForm } from './ui/AddressForm';
+import { getCountries } from '@/actions';
 
-export default function AddressPage() {
+export default async function AddressPage() {
+
+    const countries = await getCountries();
 
     return (
 
@@ -11,7 +14,7 @@ export default function AddressPage() {
         
                 <Title title="Dirección" subtitle="Dirección de entrega" />
 
-                <AddressForm />
+                <AddressForm countries={countries} />
 
             </div>
 
