@@ -1,11 +1,13 @@
 import prisma from '../lib/prisma';
 import { initialData } from './seed';
+import { countries } from './seed-countries';
 
 async function main() {
 
     // 1. Borrar registros previos
     await Promise.all([
         prisma.user.deleteMany({}),
+        prisma.country.deleteMany({}),
         prisma.productImage.deleteMany(),
         prisma.product.deleteMany(),
         prisma.category.deleteMany(),
@@ -15,6 +17,11 @@ async function main() {
 
     // Insertar usuarios en la BBDD
     await prisma.user.createMany({ data: users });
+
+    // Insertar los paises
+    await prisma.country.createMany({
+        data: countries
+    });
 
     // 2. Insertar categorias
     const  categoriesData = categories.map( category => ({
