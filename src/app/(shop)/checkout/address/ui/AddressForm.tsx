@@ -5,6 +5,8 @@ import clsx from 'clsx';
 import { useForm } from 'react-hook-form';
 import type { Country } from '@/interfaces';
 import { useAddressStore } from '@/store';
+import { setUserAddress } from '@/actions';
+import { useSession } from 'next-auth/react';
 
 type FormInputs = {
     firstName: string;
@@ -30,6 +32,10 @@ export const AddressForm = ({ countries }: Props) => {
         }
     });
 
+    const { data: session } = useSession({
+        required: true
+    })
+
     const setAddress = useAddressStore( state => state.setAddress );
     const address = useAddressStore( state => state.address );
 
@@ -42,6 +48,16 @@ export const AddressForm = ({ countries }: Props) => {
     const onSubmit = (data: FormInputs) => {
         console.log({ data });
         setAddress(data);
+
+        const { rememberAddress, ...restAddress } = data;
+
+        if ( rememberAddress ) {
+            // TODO: Server Action
+            setUserAddress(restAddress, session!.user.id);
+        } else {
+            // TODO: Server Action
+
+        }
     }
 
     return (
