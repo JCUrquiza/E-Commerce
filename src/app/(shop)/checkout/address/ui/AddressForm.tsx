@@ -5,7 +5,7 @@ import clsx from 'clsx';
 import { useForm } from 'react-hook-form';
 import type { Country } from '@/interfaces';
 import { useAddressStore } from '@/store';
-import { setUserAddress } from '@/actions';
+import { deleteUserAddress, setUserAddress } from '@/actions';
 import { useSession } from 'next-auth/react';
 
 type FormInputs = {
@@ -56,7 +56,7 @@ export const AddressForm = ({ countries }: Props) => {
             setUserAddress(restAddress, session!.user.id);
         } else {
             // TODO: Server Action
-
+            deleteUserAddress( session!.user.id );
         }
     }
 
