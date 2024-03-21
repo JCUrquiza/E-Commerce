@@ -1,9 +1,10 @@
 'use client';
 
+import React, { useEffect, useState } from 'react';
+import clsx from 'clsx';
+import { placeOrder } from '@/actions';
 import { useAddressStore, useCartStore } from '@/store';
 import { currencyFormat } from '@/utils';
-import clsx from 'clsx';
-import React, { useEffect, useState } from 'react';
 
 export const PlaceOrder = () => {
 
@@ -29,6 +30,9 @@ export const PlaceOrder = () => {
         }));
 
         console.log({ address, productToOrder });
+        const resp = await placeOrder(productToOrder, address);
+        console.log(resp);
+        
 
         setIsPlacingOrder(false);
     }
