@@ -56,7 +56,7 @@ export const AddressForm = ({ countries, userStoredAddress = {} }: Props) => {
         setAddress(restAddress);
 
         if ( rememberAddress ) {
-            await setUserAddress(restAddress, session!.user.id);
+            await setUserAddress(restAddress, session?.user.id);
         } else {
             await deleteUserAddress( session!.user.id );
         }
