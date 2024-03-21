@@ -53,49 +53,92 @@ export const placeOrder = async( productIds: ProductToOrder[], address: Address 
     }, { subTotal: 0, tax: 0, total: 0 })
 
     // Crear la transacción de bbdd
-    const prismaTx = await prisma.$transaction( async(tx) => {
+    try {
 
-        // 1.- Actualizar el stock de los productos
+        const prismaTx = await prisma.$transaction( async (tx) => {
 
-        // 2.- Crear la orden - encabezado - detalles
-        const order = await tx.order.create({
-            data: {
-                userId : userId,
-                itemsInOrder: itemsInOrder,
-                subTotal: subTotal,
-                tax: tax,
-                total: total,
-
-                OrderItem: {
-                    createMany: {
-                        data: productIds.map( p => ({
-                            quantity: p.quantity,
-                            size: p.size,
-                            productId: p.productId,
-                            price: products.find( product => product.id === p.productId)?.price ?? 0
-                        })),
+            // 1.- Actualizar el stock de los productos
+            const updatedProductsPromises = products.map( async (product) => {
+    
+                // Acumular los valores
+                const productQuantity = productIds.filter(
+                    p => p.productId === product.id
+                ).reduce( (acc, item) => item.quantity + acc, 0);
+                if ( productQuantity === 0 ) {
+                    throw new Error('No tiene cantidad definida');
+                }
+    
+    
+                return tx.product.update({
+                    where: { id: product.id },
+                    data: {
+                        inStock: {
+                            decrement: productQuantity
+                        }
+                    }
+                })
+    
+            });
+    
+            const updatedProducts = await Promise.all( updatedProductsPromises );
+    
+            // Verificar valores negativos en la existencia = no hay stock
+            updatedProducts.forEach( product => {
+                if ( product.inStock < 0 ) {
+                    throw new Error(`${product.title} no tiene inventario suficiente`);
+                }
+            })
+    
+            // 2.- Crear la orden - encabezado - detalles
+            const order = await tx.order.create({
+                data: {
+                    userId : userId,
+                    itemsInOrder: itemsInOrder,
+                    subTotal: subTotal,
+                    tax: tax,
+                    total: total,
+    
+                    OrderItem: {
+                        createMany: {
+                            data: productIds.map( p => ({
+                                quantity: p.quantity,
+                                size: p.size,
+                                productId: p.productId,
+                                price: products.find( product => product.id === p.productId)?.price ?? 0
+                            })),
+                        }
                     }
                 }
+            })
+    
+            // 3.- Crear la dirección de la orden
+            const { country, ...restAddress } = address;
+            const orderAddress = await tx.orderAddress.create({
+                data: {
+                    ...restAddress,
+                    countryId: country,
+                    orderId: order.id
+                }
+            })
+            
+            return {
+                updatedProducts: updatedProducts,
+                orden: order,
+                orderAddress: orderAddress
             }
-        })
+        });
 
-        // 3.- Crear la dirección de la orden
-        const { country, ...restAddress } = address;
-        const orderAddress = await tx.orderAddress.create({
-            data: {
-                ...restAddress,
-                countryId: country,
-                orderId: order.id
-            }
-        })
-        
         return {
-            updatedProducts: [],
-            orden: order,
-            orderAddress: orderAddress
+            ok: true,
+            order: prismaTx.orden,
+            prismaTx: prismaTx
         }
-    });
-
-    console.log({subTotal, tax, total});
+        
+    } catch (error: any) {
+        return {
+            ok: false,
+            message: error?.message
+        }
+    }
 
 }
